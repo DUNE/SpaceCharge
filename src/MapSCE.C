@@ -152,10 +152,12 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                 }
         }
 
+    double binningFactor = 10.0;
+
     cout << endl;
     cout << "xTrueMax = " << xTrueMax << ", yTrueMax = " << yTrueMax << ", zTrueMax = " << zTrueMax << endl;
 
-    int xBins = xTrueMax * 5, yBins = yTrueMax * 5, zBins = zTrueMax * 5;
+    int xBins = xTrueMax * binningFactor, yBins = yTrueMax * binningFactor, zBins = zTrueMax * binningFactor;
     cout << "xBins = " << xBins << ", yBins = " << yBins << ", zBins = " << zBins << endl;
 
     double xLimit = xTrueMax / 2.0, yLimit = yTrueMax / 2.0, zLimit = zTrueMax / 2.0;
@@ -179,11 +181,19 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
             yAxisInitialMin = dXMin;
             yAxisInitialMax = dXMax;
 
-            initialWhatToDraw =  Form("Dx:x_true-%f", xAxisInitialMax);
-            initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
-
             xAxisIntermediateMin = -yLimit;
             xAxisIntermediateMax = yLimit;
+
+            if(FieldToTransform == "Spatial")
+                {
+                    initialWhatToDraw =  Form("Dx:x_true-%f", xAxisInitialMax);
+                    initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
+                }
+            else
+                {
+                    initialWhatToDraw =  Form("Ex:xpoint-%f", xAxisInitialMax);
+                    initialConditionToDraw = "fabs(ypoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
+                }
         }
     else if(DimensionToTransform == "Y")
         {
@@ -195,11 +205,19 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
             yAxisInitialMin = dYMin;
             yAxisInitialMax = dYMax;
 
-            initialWhatToDraw =  Form("Dy:y_true-%f", xAxisInitialMax);
-            initialConditionToDraw = "fabs(x_true-%f)<0.025 && fabs(z_true-%f)<0.025";
-
             xAxisIntermediateMin = -xLimit;
             xAxisIntermediateMax = xLimit;
+
+            if(FieldToTransform == "Spatial")
+                {
+                    initialWhatToDraw =  Form("Dy:y_true-%f", xAxisInitialMax);
+                    initialConditionToDraw = "fabs(x_true-%f)<0.025 && fabs(z_true-%f)<0.025";
+                }
+            else
+                {
+                    initialWhatToDraw =  Form("Ey:ypoint-%f", xAxisInitialMax);
+                    initialConditionToDraw = "fabs(xpoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
+                }
         }
     else if (DimensionToTransform == "Z")
         {
@@ -211,11 +229,19 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
             yAxisInitialMin = dZMin;
             yAxisInitialMax = dZMax;
 
-            initialWhatToDraw =  Form("Dz:x_true-%f", xAxisInitialMax);
-            initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
-
             xAxisIntermediateMin = -yLimit;
             xAxisIntermediateMax = yLimit;
+
+            if(FieldToTransform == "Spatial")
+                {
+                    initialWhatToDraw =  Form("Dz:x_true-%f", xAxisInitialMax);
+                    initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
+                }
+            else
+                {
+                    initialWhatToDraw =  Form("Ez:xpoint-%f", xAxisInitialMax);
+                    initialConditionToDraw = "fabs(ypoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
+                }
         }
     else
         {
@@ -250,11 +276,11 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     double initialCheckSum = 0.0;
     for(int i = 0; i <= iBins; i++)
         {
-            iPosition = i / 5.0; //increment in 0.2
+            iPosition = i / binningFactor;
 
             for(int j = 0; j <= jBins; j++)
                 {
-                    jPosition = j / 5.0;
+                    jPosition = j / binningFactor;
 
                     TCanvas *cInitialHistos = new TCanvas("cInitialHistos", " ", 1250, 600);
                     cInitialHistos->cd();
@@ -321,7 +347,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     double intermediateCheckSum = 0.0;
     for(int j = 0; j <= jBins; j++)
         {
-            kPosition = j / 5.0;
+            kPosition = j / binningFactor;
 
             for(int r = 0; r < initialFitPolN + 1; r++)
                 {
@@ -387,7 +413,8 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
         {
             for(int i = 0; i < intermediateFitPolN + 1; i++)
                 {
-                    gFinalGraph[r][i]->Write(Form("gFinalGraph_%i_%i", r, i));
+                    //gFinalGraph[r][i]->Write(Form("gFinalGraph_%i_%i", r, i));
+                    gFinalGraph[r][i]->Write(Form("g%i_%i", r + 1, i));
                 }
         }
     outputFile->Write();

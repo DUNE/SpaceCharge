@@ -23,7 +23,7 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////
 void CopyDir(TDirectory *source, char* dirName)
 {
-    source->ls();
+    //source->ls();
     TDirectory *savdir = gDirectory;
     TDirectory *adir = savdir->mkdir(dirName);
     adir->cd();
@@ -90,10 +90,14 @@ int main()
     /////////////////////////////////////////////////////////////////////
     // These directories must exist for it to work
     /////////////////////////////////////////////////////////////////////
-    TString inputFile = "../InputFiles/dispOutput_protoDUNE_E500.root";
+    TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
     TString outputFile = "../OutputFiles";
     string histoDir = "../HistoDirectory";
 
+    string Experiment = "MicroBooNE";
+    string DriftField = "E500";
+
+    cout << "Doing calculations for " << Experiment << " with drift field of " << DriftField << "V/cm" << endl;
     /////////////////////////////////////////////////////////////////////
     // Set location of directories
     /////////////////////////////////////////////////////////////////////
@@ -105,6 +109,7 @@ int main()
     /////////////////////////////////////////////////////////////////////
     // Spatial field
     /////////////////////////////////////////////////////////////////////
+
     string field = "Spatial";
 
     string dimension = "K";
@@ -117,11 +122,10 @@ int main()
     intermediatePolN = 6;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
 
-
     // Y dimension
     dimension = "Y";
     initialPolN = 5;
-    intermediatePolN = 7;
+    intermediatePolN = 5;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
 
     // Z dimension
@@ -133,22 +137,44 @@ int main()
     /////////////////////////////////////////////////////////////////////
     // EField field
     /////////////////////////////////////////////////////////////////////
+    field = "EField";
 
+    // X dimension
+    dimension = "X";
+    initialPolN = 4;
+    intermediatePolN = 6;
+    myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
+
+    // Y dimension
+    dimension = "Y";
+    initialPolN = 5;
+    intermediatePolN = 5;
+    myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
+
+    // Z dimension
+    dimension = "Z";
+    initialPolN = 3;
+    intermediatePolN = 4;
+    myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
 
     /////////////////////////////////////////////////////////////////////
     //Put all outputs in central root files
     /////////////////////////////////////////////////////////////////////
-    TFile *finalOutputFile = new TFile(outputFile + "/OffsetsSCE.root", "RECREATE");
+    TFile *finalOutputFile = new TFile(outputFile + "/SCEoffsets_"+Experiment+"_"+DriftField+".root", "RECREATE");
+
     CopyFile(outputFile + "/Result_Spatial_X.root", (char*)"deltaX");
     CopyFile(outputFile + "/Result_Spatial_Y.root", (char*)"deltaY");
     CopyFile(outputFile + "/Result_Spatial_Z.root", (char*)"deltaZ");
+
+    CopyFile(outputFile + "/Result_EField_X.root", (char*)"deltaExOverE");
+    CopyFile(outputFile + "/Result_EField_Y.root", (char*)"deltaEyOverE");
+    CopyFile(outputFile + "/Result_EField_Z.root", (char*)"deltaEzOverE");
 
     finalOutputFile->ls();
     delete finalOutputFile;
 
     cout << endl;
     cout << "All Done!!" << endl << endl;
-
 
     return 0;
 }
