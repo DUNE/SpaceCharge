@@ -19,8 +19,8 @@
 
 using namespace std;
 
-MapSCE :: MapSCE(const TString input, const TString output, const string histo)
-    : InputFile(input), OutputDirectory(output), HistoDirectory(histo)
+MapSCE :: MapSCE(const TString input, const TString output, const string histo, const double drift)
+    : InputFile(input), OutputDirectory(output), HistoDirectory(histo), DriftField(drift)
 {
 }
 
@@ -37,6 +37,11 @@ void MapSCE::SetOutputDirectory(const TString output)
 void MapSCE::SetHistoDirectory(const string histo)
 {
     HistoDirectory = histo;
+}
+
+void MapSCE::SetDriftField(const double drift)
+{
+    DriftField = drift;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +65,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     cout << "----------------------------------------------------------------------" << endl;
     cout << "Performing transformation" << endl << endl;
     cout << "Input file is: " << InputFile << endl;
+    cout << "Drift field is: " << DriftField << "V/m" << endl;
     cout << "Output file directory is: " << OutputDirectory << endl;
     cout << "Field to transform is: " << FieldToTransform << endl;
     cout << "Dimension to transform is: " << DimensionToTransform << endl;
@@ -73,6 +79,8 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
 
     double xTrue, yTrue, zTrue;
     double dX, dY, dZ;
+
+    double conversionFactor = (1.0 / DriftField) * (1.0 / 100.0);
     if(FieldToTransform == "Spatial")
         {
             TreeInput = (TTree*)FileInput->Get("SpaCEtree_fwdDisp");
@@ -111,6 +119,13 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     for (int i = 0; i < TreeInput->GetEntries(); i++)
         {
             TreeInput->GetEntry(i);
+
+            if(FieldToTransform == "EField")
+                {
+                    dX = dX * conversionFactor;
+                    dY = dY * conversionFactor;
+                    dZ = dZ * conversionFactor;
+                }
 
             if(xTrue > xTrueMax)
                 {
@@ -152,7 +167,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                 }
         }
 
-    double binningFactor = 10.0;
+    double binningFactor = 5.0;
 
     cout << endl;
     cout << "xTrueMax = " << xTrueMax << ", yTrueMax = " << yTrueMax << ", zTrueMax = " << zTrueMax << endl;
@@ -191,7 +206,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                 }
             else
                 {
-                    initialWhatToDraw =  Form("Ex:xpoint-%f", xAxisInitialMax);
+                    initialWhatToDraw =  Form("Ex*%f:xpoint-%f", conversionFactor, xAxisInitialMax);
                     initialConditionToDraw = "fabs(ypoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
                 }
         }
@@ -215,7 +230,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                 }
             else
                 {
-                    initialWhatToDraw =  Form("Ey:ypoint-%f", xAxisInitialMax);
+                    initialWhatToDraw =  Form("Ey*%f:ypoint-%f", conversionFactor, xAxisInitialMax);
                     initialConditionToDraw = "fabs(xpoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
                 }
         }
@@ -239,7 +254,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                 }
             else
                 {
-                    initialWhatToDraw =  Form("Ez:xpoint-%f", xAxisInitialMax);
+                    initialWhatToDraw =  Form("Ez*%f:xpoint-%f", conversionFactor, xAxisInitialMax);
                     initialConditionToDraw = "fabs(ypoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
                 }
         }
@@ -413,8 +428,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
         {
             for(int i = 0; i < intermediateFitPolN + 1; i++)
                 {
-                    //gFinalGraph[r][i]->Write(Form("gFinalGraph_%i_%i", r, i));
-                    gFinalGraph[r][i]->Write(Form("g%i_%i", r + 1, i));
+                    gFinalGraph[r][i]->Write(Form("g%i_%i", r, i));
                 }
         }
     outputFile->Write();

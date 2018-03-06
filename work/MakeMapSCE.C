@@ -90,14 +90,14 @@ int main()
     /////////////////////////////////////////////////////////////////////
     // These directories must exist for it to work
     /////////////////////////////////////////////////////////////////////
-    TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
+    //TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
+    TString inputFile = "../InputFiles/dispOutput_protoDUNE_E500.root";
     TString outputFile = "../OutputFiles";
     string histoDir = "../HistoDirectory";
+    double driftField = 500.0;
+    string experimentName = "MicroBooNE";//MicroBooNE, protoDUNE
 
-    string Experiment = "MicroBooNE";
-    string DriftField = "E500";
-
-    cout << "Doing calculations for " << Experiment << " with drift field of " << DriftField << "V/cm" << endl;
+    cout << "Doing calculations for " << experimentName << " with drift field of " << driftField << "V/cm" << endl;
     /////////////////////////////////////////////////////////////////////
     // Set location of directories
     /////////////////////////////////////////////////////////////////////
@@ -105,6 +105,7 @@ int main()
     myMapSCE->SetInputFile(inputFile);
     myMapSCE->SetOutputDirectory(outputFile);
     myMapSCE->SetHistoDirectory(histoDir);
+    myMapSCE->SetDriftField(driftField);
 
     /////////////////////////////////////////////////////////////////////
     // Spatial field
@@ -160,7 +161,7 @@ int main()
     /////////////////////////////////////////////////////////////////////
     //Put all outputs in central root files
     /////////////////////////////////////////////////////////////////////
-    TFile *finalOutputFile = new TFile(outputFile + "/SCEoffsets_"+Experiment+"_"+DriftField+".root", "RECREATE");
+    TFile *finalOutputFile = new TFile(outputFile + "/SCEoffsets_" + experimentName + "_E" + to_string(int(driftField)) + ".root", "RECREATE");
 
     CopyFile(outputFile + "/Result_Spatial_X.root", (char*)"deltaX");
     CopyFile(outputFile + "/Result_Spatial_Y.root", (char*)"deltaY");
@@ -170,7 +171,7 @@ int main()
     CopyFile(outputFile + "/Result_EField_Y.root", (char*)"deltaEyOverE");
     CopyFile(outputFile + "/Result_EField_Z.root", (char*)"deltaEzOverE");
 
-    finalOutputFile->ls();
+    //finalOutputFile->ls();
     delete finalOutputFile;
 
     cout << endl;
