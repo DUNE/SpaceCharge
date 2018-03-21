@@ -6,24 +6,24 @@
 #include <stdio.h>
 #include <TFile.h>
 
-#include "SpaceChargeMicroBooNE.h"
+#include "SpaceChargeProtoDUNE.h"
 
-SpaceChargeMicroBooNE::SpaceChargeMicroBooNE()
+SpaceChargeProtoDUNE::SpaceChargeProtoDUNE()
 {
-    Configure("SCEoffsets_MicroBooNE_E500.root");
+    Configure("SCEoffsets_ProtoDUNE_E500.root");
 }
 
-SpaceChargeMicroBooNE::SpaceChargeMicroBooNE(std::string filename)
+SpaceChargeProtoDUNE::SpaceChargeProtoDUNE(std::string filename)
 {
     Configure(filename);
 }
 
-SpaceChargeMicroBooNE::~SpaceChargeMicroBooNE()
+SpaceChargeProtoDUNE::~SpaceChargeProtoDUNE()
 {
 
 }
 
-bool SpaceChargeMicroBooNE::Configure(std::string filename)
+bool SpaceChargeProtoDUNE::Configure(std::string filename)
 {
     TFile inputfile(filename.c_str(), "READ");
 
@@ -109,7 +109,7 @@ bool SpaceChargeMicroBooNE::Configure(std::string filename)
     return true;
 }
 
-std::vector<double> SpaceChargeMicroBooNE::GetPosOffsets(double xVal, double yVal, double zVal) const
+std::vector<double> SpaceChargeProtoDUNE::GetPosOffsets(double xVal, double yVal, double zVal) const
 {
     std::vector<double> thePosOffsets;
 
@@ -125,7 +125,7 @@ std::vector<double> SpaceChargeMicroBooNE::GetPosOffsets(double xVal, double yVa
     return thePosOffsets;
 }
 
-std::vector<double> SpaceChargeMicroBooNE::GetPosOffsetsParametric(double xVal, double yVal, double zVal) const
+std::vector<double> SpaceChargeProtoDUNE::GetPosOffsetsParametric(double xVal, double yVal, double zVal) const
 {
     std::vector<double> thePosOffsetsParametric;
 
@@ -140,7 +140,7 @@ std::vector<double> SpaceChargeMicroBooNE::GetPosOffsetsParametric(double xVal, 
     return thePosOffsetsParametric;
 }
 
-double SpaceChargeMicroBooNE::GetOnePosOffsetParametric(double xValNew, double yValNew, double zValNew, std::string axis) const
+double SpaceChargeProtoDUNE::GetOnePosOffsetParametric(double xValNew, double yValNew, double zValNew, std::string axis) const
 {
     double parA[6][7];
     double parB[6];
@@ -259,7 +259,7 @@ double SpaceChargeMicroBooNE::GetOnePosOffsetParametric(double xValNew, double y
     return offsetValNew;
 }
 
-std::vector<double> SpaceChargeMicroBooNE::GetEfieldOffsets(double xVal, double yVal, double zVal) const
+std::vector<double> SpaceChargeProtoDUNE::GetEfieldOffsets(double xVal, double yVal, double zVal) const
 {
     std::vector<double> theEfieldOffsets;
 
@@ -279,7 +279,7 @@ std::vector<double> SpaceChargeMicroBooNE::GetEfieldOffsets(double xVal, double 
     return theEfieldOffsets;
 }
 
-std::vector<double> SpaceChargeMicroBooNE::GetEfieldOffsetsParametric(double xVal, double yVal, double zVal) const
+std::vector<double> SpaceChargeProtoDUNE::GetEfieldOffsetsParametric(double xVal, double yVal, double zVal) const
 {
     std::vector<double> theEfieldOffsetsParametric;
 
@@ -294,7 +294,7 @@ std::vector<double> SpaceChargeMicroBooNE::GetEfieldOffsetsParametric(double xVa
     return theEfieldOffsetsParametric;
 }
 
-double SpaceChargeMicroBooNE::GetOneEfieldOffsetParametric(double xValNew, double yValNew, double zValNew, std::string axis) const
+double SpaceChargeProtoDUNE::GetOneEfieldOffsetParametric(double xValNew, double yValNew, double zValNew, std::string axis) const
 {
     double parA[6][7];
     double parB[6];
@@ -413,40 +413,41 @@ double SpaceChargeMicroBooNE::GetOneEfieldOffsetParametric(double xValNew, doubl
     return offsetValNew;
 }
 
-double SpaceChargeMicroBooNE::TransformX(double xVal) const
+double SpaceChargeProtoDUNE::TransformX(double xVal) const
 {
     double xValNew;
-    xValNew = 2.50 - (2.50 / 2.56) * (xVal / 100.0);
-    xValNew -= 1.25;
+    xValNew = (fabs(xVal) / 100.0);
+    xValNew -= 1.8;
 
     return xValNew;
 }
 
-double SpaceChargeMicroBooNE::TransformY(double yVal) const
+double SpaceChargeProtoDUNE::TransformY(double yVal) const
 {
     double yValNew;
-    yValNew = (2.50 / 2.33) * ((yVal / 100.0) + 1.165);
-    yValNew -= 1.25;
+    yValNew = (6.00 / 6.08) * ((yVal + 0.2) / 100.0);
+    yValNew -= 3.0;
 
     return yValNew;
 }
 
-double SpaceChargeMicroBooNE::TransformZ(double zVal) const
+double SpaceChargeProtoDUNE::TransformZ(double zVal) const
 {
     double zValNew;
-    zValNew = (10.0 / 10.37) * (zVal / 100.0);
+    zValNew = (7.20 / 6.97) * ((zVal + 0.8) / 100.0);
 
     return zValNew;
 }
 
-bool SpaceChargeMicroBooNE::IsInsideBoundaries(double xVal, double yVal, double zVal) const
+bool SpaceChargeProtoDUNE::IsInsideBoundaries(double xVal, double yVal, double zVal) const
 {
     bool isInside = true;
 
-    if((xVal < 0.0) || (xVal > 260.0) || (yVal < -120.0) || (yVal > 120.0) || (zVal < 0.0) || (zVal > 1050.0))
+    if((xVal < -360.0) || (xVal > 360.0) || (yVal < -5.0) || (yVal > 615.0) || (zVal < -5.0) || (zVal > 705.0))
         {
             isInside = false;
         }
 
     return isInside;
 }
+

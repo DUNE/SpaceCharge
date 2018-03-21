@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 
-class SpaceChargeMicroBooNE
+class SpaceChargeProtoDUNE
 {
 
  public:
 
-    SpaceChargeMicroBooNE();
-    SpaceChargeMicroBooNE(std::string filename);
-    ~SpaceChargeMicroBooNE();
+    SpaceChargeProtoDUNE();
+    SpaceChargeProtoDUNE(std::string filename);
+    ~SpaceChargeProtoDUNE();
 
     bool Configure(std::string filename);
 
@@ -111,5 +111,4 @@ class SpaceChargeMicroBooNE
     TF1 *f3_Ez = new TF1("f3_Ez", "pol4");
     TF1 *f4_Ez = new TF1("f4_Ez", "pol4");
     TF1 *fFinal_Ez = new TF1("fFinal_Ez", "pol3");
-
-}; // class SpaceChargeMicroBooNE
+}; // class SpaceChargeProtoDUNE

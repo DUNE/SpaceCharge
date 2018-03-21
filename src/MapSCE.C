@@ -80,7 +80,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     double xTrue, yTrue, zTrue;
     double dX, dY, dZ;
 
-    double conversionFactor = (1.0 / DriftField) * (1.0 / 100.0);
+    double conversionFactor = 1.0;//(1.0 / DriftField) * (1.0 / 100.0);
     if(FieldToTransform == "Spatial")
         {
             TreeInput = (TTree*)FileInput->Get("SpaCEtree_fwdDisp");

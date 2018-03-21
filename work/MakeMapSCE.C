@@ -1,18 +1,13 @@
-// Root stuff
+#include <iostream>
 #include <TROOT.h>
 #include <TFile.h>
 #include <TH1.h>
 #include <TH2.h>
-#include "TROOT.h"
-#include "TKey.h"
-#include "TFile.h"
-#include "TSystem.h"
-#include "TTree.h"
-
-// C++ stuff
-#include <iostream>
-#include <chrono>
-#include <random>
+#include <TROOT.h>
+#include <TKey.h>
+#include <TFile.h>
+#include <TSystem.h>
+#include <TTree.h>
 
 #include "../src/MapSCE.h"
 
@@ -23,7 +18,6 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////
 void CopyDir(TDirectory *source, char* dirName)
 {
-    //source->ls();
     TDirectory *savdir = gDirectory;
     TDirectory *adir = savdir->mkdir(dirName);
     adir->cd();
@@ -87,15 +81,16 @@ int main()
 {
     cout << endl;
 
-    /////////////////////////////////////////////////////////////////////
+    //TString inputFile = "../InputFiles/dispOutput_protoDUNE_E500.root";
+    //string experimentName = "ProtoDUNE";
+
+    TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
+    string experimentName = "MicroBooNE";
+
     // These directories must exist for it to work
-    /////////////////////////////////////////////////////////////////////
-    //TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
-    TString inputFile = "../InputFiles/dispOutput_protoDUNE_E500.root";
     TString outputFile = "../OutputFiles";
     string histoDir = "../HistoDirectory";
     double driftField = 500.0;
-    string experimentName = "MicroBooNE";//MicroBooNE, protoDUNE
 
     cout << "Doing calculations for " << experimentName << " with drift field of " << driftField << "V/cm" << endl;
     /////////////////////////////////////////////////////////////////////
@@ -110,7 +105,6 @@ int main()
     /////////////////////////////////////////////////////////////////////
     // Spatial field
     /////////////////////////////////////////////////////////////////////
-
     string field = "Spatial";
 
     string dimension = "K";
@@ -171,7 +165,6 @@ int main()
     CopyFile(outputFile + "/Result_EField_Y.root", (char*)"deltaEyOverE");
     CopyFile(outputFile + "/Result_EField_Z.root", (char*)"deltaEzOverE");
 
-    //finalOutputFile->ls();
     delete finalOutputFile;
 
     cout << endl;

@@ -1,16 +1,8 @@
-////////////////////////////////////////////////////////////////////////
-// \file SpaceCharge.h
-// \brief header of class for storing/accessing space charge distortions for /
-////////////////////////////////////////////////////////////////////////
-
-// ROOT includes
-#include "TGraph.h"
-#include "TF1.h"
-#include "TFile.h"
-
-// C/C++ standard libraries
 #include <string>
 #include <vector>
+#include <TGraph.h>
+#include <TF1.h>
+#include <TFile.h>
 
 class SpaceCharge
 {
@@ -30,7 +22,7 @@ class SpaceCharge
  protected:
     int initialSpatialFitPolN[3], intermediateSpatialFitPolN[3];
     int initialEFieldFitPolN[3], intermediateEFieldFitPolN[3];
-    std::string ExperimentName;//MicroBooNE, protoDUNE, SBND
+    std::string ExperimentName;//MicroBooNE, ProtoDUNE, SBND
 
     std::vector<double> GetPosOffsetsParametric(double xVal, double yVal, double zVal) const;
     double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
