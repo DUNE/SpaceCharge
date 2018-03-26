@@ -81,11 +81,11 @@ int main()
 {
     cout << endl;
 
-    //TString inputFile = "../InputFiles/dispOutput_protoDUNE_E500.root";
-    //string experimentName = "ProtoDUNE";
+    TString inputFile = "../InputFiles/dispOutput_protoDUNE_E500.root";
+    string experimentName = "ProtoDUNE";
 
-    TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
-    string experimentName = "MicroBooNE";
+    //TString inputFile = "../InputFiles/dispOutput_MicroBooNE_E500.root";
+    //string experimentName = "MicroBooNE";
 
     // These directories must exist for it to work
     TString outputFile = "../OutputFiles";

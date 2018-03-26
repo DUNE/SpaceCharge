@@ -32,6 +32,8 @@ int main()
     
     SpaceCharge *myExperiment = new SpaceCharge("../OutputFiles/SCEoffsets_ProtoDUNE_E500.root",
 						initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN, "ProtoDUNE");
+    //vector<double> mySpatialOffsets = myExperiment->GetPosOffsets(0.0, 0.0, 500.0);
+   
     SpaceChargeProtoDUNE *oldExperiment = new SpaceChargeProtoDUNE("../TestFiles/Mike_SCEoffsets_ProtoDUNE_E500.root");
     TFile *FileInput = new TFile("../InputFiles/dispOutput_protoDUNE_E500.root");
     TFile *histoFile = new TFile("ProtoDUNEOffsetsComparision.root", "RECREATE");
@@ -41,7 +43,7 @@ int main()
     int yMax = 615;
     int zMin = -5;
     int zMax = 705;
-    
+
     /**
        SpaceCharge *myExperiment = new SpaceCharge("../OutputFiles/SCEoffsets_MicroBooNE_E500.root",
        initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN, "MicroBooNE");
@@ -57,8 +59,8 @@ int main()
     **/
 
     const int dBins = 500;
-    const double minD = -0.5;
-    const double maxD = 0.5;
+    const double minD = -0.1;
+    const double maxD = 0.1;
     const int eBins = 500;
     const double minE = -10000;
     const double maxE = 10000;

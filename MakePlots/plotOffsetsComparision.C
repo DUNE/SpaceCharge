@@ -43,6 +43,7 @@ void plotOffsetsComparision()
     TFile *inputFile = new TFile();
     for(unsigned int i = 0; i <= 1; i++)
         {
+	    if(i==1) continue;
             if(i == 0)
                 {
                     inputFile = new TFile("../work/ProtoDUNEOffsetsComparision.root", "r");
@@ -65,10 +66,13 @@ void plotOffsetsComparision()
             oDx->SetTitle("Mike's");
 
 	    cComparisionD->cd(1);
+	    gPad->SetLogy();
 	    iDx->Draw();
 	    cComparisionD->cd(2);
+	    gPad->SetLogy();
             mDx->Draw();
 	    cComparisionD->cd(3);
+	    gPad->SetLogy();
             oDx->Draw();
 
 	    TH1D *iDy = (TH1D*)inputFile->Get("iDy");
@@ -79,10 +83,13 @@ void plotOffsetsComparision()
             setHisto(oDy, "Dy", "");
 
             cComparisionD->cd(4);
+	    gPad->SetLogy();
             iDy->Draw();
             cComparisionD->cd(5);
+	    gPad->SetLogy();
             mDy->Draw();
             cComparisionD->cd(6);
+	    gPad->SetLogy();
             oDy->Draw();
 
 	    TH1D *iDz = (TH1D*)inputFile->Get("iDz");
@@ -93,10 +100,13 @@ void plotOffsetsComparision()
             setHisto(oDz, "Dz", "");
 
             cComparisionD->cd(7);
+	    gPad->SetLogy();
             iDz->Draw();
             cComparisionD->cd(8);
+	    gPad->SetLogy();
             mDz->Draw();
             cComparisionD->cd(9);
+	    gPad->SetLogy();
             oDz->Draw();
 	    cComparisionD->Update();
 
@@ -151,11 +161,11 @@ void plotOffsetsComparision()
 	    if(i == 0)
                 {
 		    cComparisionD->SaveAs("ProtoDUNE_D.png");
-		    cComparisionE->SaveAs("ProtoDUNE_E.png");
+		    //cComparisionE->SaveAs("ProtoDUNE_E.png");
 		}
 	    if(i==1){
-		cComparisionD->SaveAs("MicroBooNE_D.png");
-		cComparisionE->SaveAs("MicroBooNE_E.png");
+		//cComparisionD->SaveAs("MicroBooNE_D.png");
+		//cComparisionE->SaveAs("MicroBooNE_E.png");
 	    }
         }
 }

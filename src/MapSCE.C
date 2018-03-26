@@ -49,16 +49,16 @@ void MapSCE::SetDriftField(const double drift)
 // FieldToTransform can be Spatial or EField                                         //
 // DimensionToTransform can be X, Y, Z                                               //
 // FitPolN is polynomial of degree N: f(x) = p_0 + p_1*x + p_2*x^2 +...+ p_N*x^N     //
-// For each call initialFitPolN x intermediateFitPolN TGraphs will be saved              //
+// For each call initialFitPolN x intermediateFitPolN TGraphs will be saved          //
 ///////////////////////////////////////////////////////////////////////////////////////
 void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTransform, int initialFitPolN, int intermediateFitPolN)
 {
+    //Settings for Histogram Statistics
     gStyle->SetOptStat(111);
     gStyle->SetStatY(0.35);
     gStyle->SetStatX(0.89);
     gStyle->SetStatW(0.11);
     gStyle->SetStatH(0.1);
-
     gStyle->SetOptFit(0111);
 
     cout << endl;
@@ -266,6 +266,9 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
         }
 
     cout << "Working on dimension " << DimensionToTransform << endl;
+    cout << "Initial PolN, Intermediate PolN: " << initialFitPolN << ", " << intermediateFitPolN << endl;
+    cout << "Initial what to draw: " << initialWhatToDraw << endl;
+    cout << "Initial condition to draw: " << initialConditionToDraw << endl;
     cout << "iBins, jBins: " << iBins << ", " << jBins << endl;
     cout << "xAxisInitialMin, xAxisInitialMax: " << xAxisInitialMin << ", " << xAxisInitialMax << endl;
     cout << "yAxisInitialMin, yAxisInitialMax: " << yAxisInitialMin << ", " << yAxisInitialMax << endl;
@@ -275,9 +278,9 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     double initialFitParameter[initialFitPolN + 1];
     fill(initialFitParameter, initialFitParameter + (initialFitPolN + 1) / sizeof(double), 0.0);
     double initialFitParameterMin[initialFitPolN + 1];
-    fill(initialFitParameterMin, initialFitParameterMin + (initialFitPolN + 1) / sizeof(double), 9999.99);
+    fill(initialFitParameterMin, initialFitParameterMin + (initialFitPolN + 1) / sizeof(double), DBL_MAX);
     double initialFitParameterMax[initialFitPolN + 1];
-    fill(initialFitParameterMax, initialFitParameterMax + (initialFitPolN + 1) / sizeof(double), -9999.99);
+    fill(initialFitParameterMax, initialFitParameterMax + (initialFitPolN + 1) / sizeof(double), -DBL_MAX);
 
     TTree *tIntermediateTree = new TTree("tIntermediateTree", "tIntermediateTree");
     tIntermediateTree->Branch("iPosition", &iPosition, "iPosition/D");
@@ -292,7 +295,6 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     for(int i = 0; i <= iBins; i++)
         {
             iPosition = i / binningFactor;
-
             for(int j = 0; j <= jBins; j++)
                 {
                     jPosition = j / binningFactor;
@@ -300,18 +302,18 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                     TCanvas *cInitialHistos = new TCanvas("cInitialHistos", " ", 1250, 600);
                     cInitialHistos->cd();
 
-
                     TH2D *hInitialHistos = new TH2D("hInitialHistos", "",
-                                                    500, xAxisInitialMin + (0.025 * xAxisInitialMin), xAxisInitialMax + (0.025 * xAxisInitialMax),
-                                                    250, yAxisInitialMin + (0.025 * yAxisInitialMin), yAxisInitialMax + (0.025 * yAxisInitialMax));
+                                                    250, xAxisInitialMin + (0.025 * xAxisInitialMin), xAxisInitialMax + (0.025 * xAxisInitialMax),
+                                                    1000, yAxisInitialMin + (0.025 * yAxisInitialMin), yAxisInitialMax + (0.025 * yAxisInitialMax));
                     hInitialHistos->Sumw2();
-
                     TreeInput->Project("hInitialHistos", initialWhatToDraw, Form(initialConditionToDraw, iPosition, jPosition));
+                    hInitialHistos->SetTitle(initialWhatToDraw + " for " + Form(initialConditionToDraw, iPosition, jPosition));
 
                     TF1 *initialFitFunction =  new TF1("initialFitFunction", Form("pol%i", initialFitPolN));
                     initialFitFunction->SetLineWidth(1);
                     hInitialHistos->Fit(initialFitFunction, "Q");
                     initialFitFunction->GetParameters(initialFitParameter);
+
 
                     double initialFitCheck = (initialFitFunction->GetChisquare()) / (initialFitFunction->GetNDF());
                     initialCheckSum += initialFitCheck;
@@ -369,11 +371,14 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                     TCanvas *cIntermediateHistos = new TCanvas("cIntermediateHistos", " ", 1250, 600);
                     cIntermediateHistos->cd();
                     TH2D *hIntermediateHistos = new TH2D("hIntermediateHistos", "",
-                                                         500, xAxisIntermediateMin + (0.025 * xAxisIntermediateMin), xAxisIntermediateMax + (0.025 * xAxisIntermediateMax),
-                                                         250, initialFitParameterMin[r] + (0.025 * initialFitParameterMin[r]), initialFitParameterMax[r] + (0.025 * initialFitParameterMax[r]));
+                                                         250, xAxisIntermediateMin + (0.025 * xAxisIntermediateMin), xAxisIntermediateMax + (0.025 * xAxisIntermediateMax),
+                                                         1000, initialFitParameterMin[r] + (0.025 * initialFitParameterMin[r]), initialFitParameterMax[r] + (0.025 * initialFitParameterMax[r]));
                     hIntermediateHistos->Sumw2();
 
-                    tIntermediateTree->Project("hIntermediateHistos", Form("initialFitParameter_%i:iPosition-%f", r, xAxisIntermediateMax), Form("fabs(jPosition-%f)<0.025", kPosition));
+                    TString whatToDraw = Form("initialFitParameter_%i:iPosition-%f", r, xAxisIntermediateMax);
+                    TString conditionToDraw = Form("fabs(jPosition-%f)<0.025", kPosition);
+                    tIntermediateTree->Project("hIntermediateHistos", whatToDraw, conditionToDraw);
+                    hIntermediateHistos->SetTitle(whatToDraw + " for " + conditionToDraw);
 
                     TF1 *intermediateFitFunction =  new TF1("intermediateFitFunction", Form("pol%i", intermediateFitPolN));
                     intermediateFitFunction->SetLineWidth(1);

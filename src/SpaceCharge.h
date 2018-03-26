@@ -18,14 +18,14 @@ class SpaceCharge
 
     std::vector<double> GetPosOffsets(double xVal, double yVal, double zVal) const;
     std::vector<double> GetEfieldOffsets(double xVal, double yVal, double zVal) const;
-
+    double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const; 
  protected:
     int initialSpatialFitPolN[3], intermediateSpatialFitPolN[3];
     int initialEFieldFitPolN[3], intermediateEFieldFitPolN[3];
     std::string ExperimentName;//MicroBooNE, ProtoDUNE, SBND
 
     std::vector<double> GetPosOffsetsParametric(double xVal, double yVal, double zVal) const;
-    double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
+    // double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
     std::vector<double> GetEfieldOffsetsParametric(double xVal, double yVal, double zVal) const;
     double GetOneEfieldOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
     double TransformX(double xVal) const;
@@ -39,21 +39,21 @@ class SpaceCharge
 
     TGraph *gSpatialGraphX[99][99];
     TF1 *intermediateSpatialFitFunctionX[99];
-    TF1 *initialSpatialFitFunctionX =  new TF1("initialSpatialFitFunctionX", Form("pol%i", initialSpatialFitPolN[0]));
+    TF1 *initialSpatialFitFunctionX;
     TGraph *gSpatialGraphY[99][99];
     TF1 *intermediateSpatialFitFunctionY[99];
-    TF1 *initialSpatialFitFunctionY =  new TF1("initialSpatialFitFunctionY", Form("pol%i", initialSpatialFitPolN[1]));
+    TF1 *initialSpatialFitFunctionY;
     TGraph *gSpatialGraphZ[99][99];
     TF1 *intermediateSpatialFitFunctionZ[99];
-    TF1 *initialSpatialFitFunctionZ =  new TF1("initialSpatialFitFunctionZ", Form("pol%i", initialSpatialFitPolN[2]));
+    TF1 *initialSpatialFitFunctionZ;
 
     TGraph *gEFieldGraphX[99][99];
     TF1 *intermediateEFieldFitFunctionX[99];
-    TF1 *initialEFieldFitFunctionX =  new TF1("initialEFieldFitFunctionX", Form("pol%i", initialEFieldFitPolN[0]));
+    TF1 *initialEFieldFitFunctionX;
     TGraph *gEFieldGraphY[99][99];
     TF1 *intermediateEFieldFitFunctionY[99];
-    TF1 *initialEFieldFitFunctionY =  new TF1("initialEFieldFitFunctionY", Form("pol%i", initialEFieldFitPolN[1]));
+    TF1 *initialEFieldFitFunctionY;
     TGraph *gEFieldGraphZ[99][99];
     TF1 *intermediateEFieldFitFunctionZ[99];
-    TF1 *initialEFieldFitFunctionZ =  new TF1("initialEFieldFitFunctionZ", Form("pol%i", initialEFieldFitPolN[2]));
+    TF1 *initialEFieldFitFunctionZ;
 }; // class SpaceCharge
