@@ -25,14 +25,13 @@ using namespace std;
 
 int main()
 {
-    int initialSpatialN[3] = {4, 5, 3};
-    int intermediateSpatialN[3] = {6, 5, 4};
-    int initialEFieldN[3] = {4, 5, 3};
-    int intermediateEFieldN[3] = {6, 5, 4};
-    
+    int initialSpatialN[3] = {3, 3, 3};
+    int intermediateSpatialN[3] = {4, 4, 4};
+    int initialEFieldN[3] = {3, 3, 3};
+    int intermediateEFieldN[3] = {4, 4, 4};
+
     SpaceCharge *myExperiment = new SpaceCharge("../OutputFiles/SCEoffsets_ProtoDUNE_E500.root",
 						initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN, "ProtoDUNE");
-    //vector<double> mySpatialOffsets = myExperiment->GetPosOffsets(0.0, 0.0, 500.0);
    
     SpaceChargeProtoDUNE *oldExperiment = new SpaceChargeProtoDUNE("../TestFiles/Mike_SCEoffsets_ProtoDUNE_E500.root");
     TFile *FileInput = new TFile("../InputFiles/dispOutput_protoDUNE_E500.root");
@@ -58,12 +57,12 @@ int main()
        int zMax = 1050;
     **/
 
-    const int dBins = 500;
+    const int dBins = 100;
     const double minD = -0.1;
     const double maxD = 0.1;
-    const int eBins = 500;
-    const double minE = -10000;
-    const double maxE = 10000;
+    const int eBins = 100;
+    const double minE = -7000;
+    const double maxE = 7000;
 
     TH1D *iDx = new TH1D("iDx", "", dBins, minD, maxD);
     TH1D *iDy = new TH1D("iDy", "", dBins, minD, maxD);
@@ -97,13 +96,13 @@ int main()
 
     for(int iX = xMin; iX <= xMax; iX++)
         {
-	    iX = iX + 10;
+	    iX = iX + 5;
             for(int iY = yMin; iY <= yMax; iY++)
                 {
-		    iY = iY + 10;
+		    iY = iY + 5;
                     for(int iZ = zMin; iZ <= zMax; iZ++)
                         {
-			    iZ = iZ + 10;
+			    iZ = iZ + 5;
                             cout << iX << ", " << iY << ", " << iZ << endl;
 
                             vector<double> mySpatialOffsets = myExperiment->GetPosOffsets(iX, iY, iZ);

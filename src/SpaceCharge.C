@@ -166,15 +166,11 @@ double SpaceCharge::GetOnePosOffsetParametric(double xValNew, double yValNew, do
         {
             for(int i = 0; i < initialSpatialFitPolN[0] + 1; i++)
                 {
-		    //TCanvas *c = new TCanvas("c");
                     for(int j = 0; j < intermediateSpatialFitPolN[0] + 1; j++)
                         {
                             parA[i][j] = gSpatialGraphX[i][j]->Eval(zValNew);
-			    //std::cout<<"parA[i][j]: "<<parA[i][j]<<std::endl;
                         }
                     intermediateSpatialFitFunctionX[i]->SetParameters(parA[i]);
-		    //intermediateSpatialFitFunctionX[i]->DrawF1(-3.0, 3.0);
-		    //c->SaveAs(Form("%i.png",i));
                 }
         }
     else if(axis == "Y")
@@ -213,19 +209,14 @@ double SpaceCharge::GetOnePosOffsetParametric(double xValNew, double yValNew, do
             aValNew = yValNew;
             bValNew = xValNew;
         }
-    //std::cout<<"aValue, bValue, zValue: "<<aValNew<<", "<<bValNew<<", "<<zValNew<<std::endl;
     double offsetValNew = 0.0;
     if(axis == "X")
         {
             for(int i = 0; i < initialSpatialFitPolN[0] + 1; i++)
                 {
                     parB[i] = intermediateSpatialFitFunctionX[i]->Eval(aValNew);
-		    //std::cout<<"parB[i]: "<<parB[i]<<std::endl;
                 }
-	    //TCanvas *c2 = new TCanvas("c2");
             initialSpatialFitFunctionX->SetParameters(parB);
-	    //initialSpatialFitFunctionX->DrawF1(-1.6, 1.6);
-	    //c2->SaveAs("X.png");
             offsetValNew = 100.0 * initialSpatialFitFunctionX->Eval(bValNew);
         }
     else if(axis == "Y")

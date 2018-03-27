@@ -18,14 +18,13 @@ class SpaceCharge
 
     std::vector<double> GetPosOffsets(double xVal, double yVal, double zVal) const;
     std::vector<double> GetEfieldOffsets(double xVal, double yVal, double zVal) const;
-    double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const; 
  protected:
     int initialSpatialFitPolN[3], intermediateSpatialFitPolN[3];
     int initialEFieldFitPolN[3], intermediateEFieldFitPolN[3];
     std::string ExperimentName;//MicroBooNE, ProtoDUNE, SBND
 
     std::vector<double> GetPosOffsetsParametric(double xVal, double yVal, double zVal) const;
-    // double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
+    double GetOnePosOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
     std::vector<double> GetEfieldOffsetsParametric(double xVal, double yVal, double zVal) const;
     double GetOneEfieldOffsetParametric(double xVal, double yVal, double zVal, std::string axis) const;
     double TransformX(double xVal) const;

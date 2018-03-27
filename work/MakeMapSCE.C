@@ -113,14 +113,14 @@ int main()
 
     // X dimension
     dimension = "X";
-    initialPolN = 4;
-    intermediatePolN = 6;
+    initialPolN = 3;
+    intermediatePolN = 4;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
-
+   
     // Y dimension
     dimension = "Y";
-    initialPolN = 5;
-    intermediatePolN = 5;
+    initialPolN = 3;
+    intermediatePolN = 4;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
 
     // Z dimension
@@ -136,14 +136,14 @@ int main()
 
     // X dimension
     dimension = "X";
-    initialPolN = 4;
-    intermediatePolN = 6;
+    initialPolN = 3;
+    intermediatePolN = 4;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
 
     // Y dimension
     dimension = "Y";
-    initialPolN = 5;
-    intermediatePolN = 5;
+    initialPolN = 3;
+    intermediatePolN = 4;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
 
     // Z dimension
