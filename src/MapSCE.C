@@ -14,6 +14,7 @@
 #include <TStyle.h>
 #include <TGraph.h>
 #include <TRatioPlot.h>
+#include <TPaveText.h>
 
 #include "MapSCE.h"
 
@@ -53,14 +54,6 @@ void MapSCE::SetDriftField(const double drift)
 ///////////////////////////////////////////////////////////////////////////////////////
 void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTransform, int initialFitPolN, int intermediateFitPolN)
 {
-    //Settings for Histogram Statistics
-    gStyle->SetOptStat(111);
-    gStyle->SetStatY(0.35);
-    gStyle->SetStatX(0.89);
-    gStyle->SetStatW(0.11);
-    gStyle->SetStatH(0.1);
-    gStyle->SetOptFit(0111);
-
     cout << endl;
     cout << "----------------------------------------------------------------------" << endl;
     cout << "Performing transformation" << endl << endl;
@@ -160,7 +153,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
 
             if(FieldToTransform == "Spatial")
                 {
-                    initialWhatToDraw =  Form("Dx:x_true-%f", xAxisInitialMax);
+                    initialWhatToDraw =  Form("Dx:x_true-%f", xAxisInitialMax-0.0001);
                     initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
                 }
             else
@@ -254,9 +247,18 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                     TreeInput->Fit("initialFitFunction", initialWhatToDraw, Form(initialConditionToDraw, iPosition, jPosition),"Q");
                     initialFitFunction->GetParameters(initialFitParameter);
                     initialFitFunction->SetLineWidth(1);
+
+		    TPaveText* initialStatistics = fitInfo();
+		    initialStatistics->AddText(Form("Chi2: %.4f", initialFitFunction->GetChisquare()));
+		    initialStatistics->AddText(Form("NDF: %i", initialFitFunction->GetNDF()));
+		    for(int r = 0; r < initialFitPolN + 1; r++)
+			{
+			    initialStatistics->AddText(Form("p%i: %.4e", r, initialFitParameter[r]));
+			}
+		    initialStatistics->Draw("SAME");
+
                     cInitialHistos->Update();
                     cInitialHistos->SaveAs(Form("%s/h%s_InitialHisto_%s_%i_%i.pdf", HistoDirectory.c_str(), FieldToTransform.c_str(), DimensionToTransform.c_str(), i, j));
-
                     tIntermediateTree->Fill();
                     delete cInitialHistos;
 
@@ -299,8 +301,17 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                     tIntermediateTree->Fit("intermediateFitFunction", Form("initialFitParameter_%i:iPosition-%f", r, xAxisIntermediateMax), Form("fabs(jPosition-%f)<0.025", kPosition), "Q");
                     intermediateFitFunction->GetParameters(intermediateFitParameter[r]);
                     intermediateFitFunction->SetLineWidth(1);
-		    cIntermediateHistos->Update();
 
+		    TPaveText* intermediateStatistics = fitInfo();
+                    intermediateStatistics->AddText(Form("Chi2: %.4f", intermediateFitFunction->GetChisquare()));
+                    intermediateStatistics->AddText(Form("NDF: %i", intermediateFitFunction->GetNDF()));
+                    for(int t = 0; t < intermediateFitPolN + 1; t++)
+                        {
+                            intermediateStatistics->AddText(Form("p%i: %.4e", t, intermediateFitParameter[r][t]));
+                        }
+                    intermediateStatistics->Draw("SAME");
+
+		    cIntermediateHistos->Update();
                     cIntermediateHistos->SaveAs(Form("%s/h%s_IntermediateHisto_%s_%i_%i.pdf", HistoDirectory.c_str(), FieldToTransform.c_str(), DimensionToTransform.c_str(), r, j));
                     delete cIntermediateHistos;
 

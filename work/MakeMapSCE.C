@@ -113,10 +113,10 @@ int main()
 
     // X dimension
     dimension = "X";
-    initialPolN = 3;
+    initialPolN = 4;
     intermediatePolN = 4;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
-   
+    /**   
     // Y dimension
     dimension = "Y";
     initialPolN = 3;
@@ -151,7 +151,7 @@ int main()
     initialPolN = 3;
     intermediatePolN = 4;
     myMapSCE->PerformTransformation(field, dimension, initialPolN, intermediatePolN);
-
+    **/
     /////////////////////////////////////////////////////////////////////
     //Put all outputs in central root files
     /////////////////////////////////////////////////////////////////////

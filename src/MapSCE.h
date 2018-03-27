@@ -1,6 +1,8 @@
 #ifndef MAP_SCE_H
 #define MAP_SCE_H
 
+#include <TPaveText.h>
+
 using namespace std;
 
 class MapSCE
@@ -25,6 +27,19 @@ class MapSCE
 
     // To perform transformation
     void PerformTransformation(string FieldToTransform, string DimensionToTransform, int rawFitPolN, int intermediateFitPolN);
+
+    // To print fit info in histogram
+    TPaveText* fitInfo()
+    {
+	TPaveText *text = new TPaveText(0.9, 0.65, 1.0, 1.0, "brNDC");
+	text->SetTextSize(0.025);
+	text->SetBorderSize(0);
+	text->SetTextFont(42);
+	text->SetFillColor(10);
+	text->SetTextColor(1);
+	text->SetTextAlign(12);
+	return text;
+    }
 };
 
 #endif

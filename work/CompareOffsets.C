@@ -32,7 +32,7 @@ int main()
 
     SpaceCharge *myExperiment = new SpaceCharge("../OutputFiles/SCEoffsets_ProtoDUNE_E500.root",
 						initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN, "ProtoDUNE");
-   
+
     SpaceChargeProtoDUNE *oldExperiment = new SpaceChargeProtoDUNE("../TestFiles/Mike_SCEoffsets_ProtoDUNE_E500.root");
     TFile *FileInput = new TFile("../InputFiles/dispOutput_protoDUNE_E500.root");
     TFile *histoFile = new TFile("ProtoDUNEOffsetsComparision.root", "RECREATE");
@@ -96,13 +96,13 @@ int main()
 
     for(int iX = xMin; iX <= xMax; iX++)
         {
-	    iX = iX + 5;
+            iX = iX + 10;
             for(int iY = yMin; iY <= yMax; iY++)
                 {
-		    iY = iY + 5;
+                    iY = iY + 10;
                     for(int iZ = zMin; iZ <= zMax; iZ++)
                         {
-			    iZ = iZ + 5;
+                            iZ = iZ + 10;
                             cout << iX << ", " << iY << ", " << iZ << endl;
 
                             vector<double> mySpatialOffsets = myExperiment->GetPosOffsets(iX, iY, iZ);
