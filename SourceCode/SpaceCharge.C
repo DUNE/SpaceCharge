@@ -256,9 +256,9 @@ std::vector<double> SpaceCharge::GetEfieldOffsets(double xVal, double yVal, doub
             theEfieldOffsets = GetEfieldOffsetsParametric(xVal, yVal, zVal);
         }
 
-    theEfieldOffsets.at(0) = -1.0 * theEfieldOffsets.at(0);
-    theEfieldOffsets.at(1) = -1.0 * theEfieldOffsets.at(1);
-    theEfieldOffsets.at(2) = -1.0 * theEfieldOffsets.at(2);
+    //theEfieldOffsets.at(0) = -1.0 * theEfieldOffsets.at(0);
+    //theEfieldOffsets.at(1) = -1.0 * theEfieldOffsets.at(1);
+    //theEfieldOffsets.at(2) = -1.0 * theEfieldOffsets.at(2);
 
     return theEfieldOffsets;
 }
