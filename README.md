@@ -5,10 +5,28 @@ The space charge effect is the build-up of slow-moving positive ions in a detect
 
 ### Source 
 MapSCE::PerformTransformation performs the transformation. Field to transform can be Spatial or E-Field and dimension to transform can be X, Y, or Z. Produced histograms are saved in HistoDirectory and ROOT output files in OutputFiles directory.
-All the parameters are set in MakeMapSCE.C and WorkArea/MakeMap/runMakeMapSCE.sh runs the the code to produce the SCE offsets. 
+All the parameters are set in MakeMapSCE.C and 
+```
+./WorkArea/MakeMap/runMakeMapSCE.sh 
+```
+runs the the code to produce the SCE offsets. 
 
-SpaceCharge is used for accessing the SCE. Currently, there is an option to choose between MicroBooNE and ProtoDUNE experiments. WorkArea/CompareOffsets/CompareOffsets.C accesses the SCE and WorkArea/CompareOffsets/runCompareOffsets.sh runs it.
+SpaceCharge is used for accessing the SCE. Currently, there is an option to choose between MicroBooNE and ProtoDUNE experiments. WorkArea/CompareOffsets/CompareOffsets.C accesses the SCE and 
+```
+./WorkArea/CompareOffsets/runCompareOffsets.sh
+```
+runs it.
 
 ### Extra
 OldFiles/MicroBooNE and OldFiles/ProtoDUNE contains previously produced ROOT offset files and codes to access them.
 
+### Contact
+Arbin Timilsina – [Linkedin](https://www.linkedin.com/in/arbintimilsina/)
+[GitHub](https://github.com/ArbinTimilsina)
+
+### To contribute
+1. Fork it (<https://github.com/ArbinTimilsina/MapSCE/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
