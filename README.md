@@ -20,10 +20,6 @@ runs it.
 ### Extra
 OldFiles/MicroBooNE and OldFiles/ProtoDUNE contains previously produced ROOT offset files and codes to access them.
 
-### Contact
-Arbin Timilsina – [Linkedin](https://www.linkedin.com/in/arbintimilsina/)
-[GitHub](https://github.com/ArbinTimilsina)
-
 ### To contribute
 1. Fork it (<https://github.com/ArbinTimilsina/MapSCE/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
