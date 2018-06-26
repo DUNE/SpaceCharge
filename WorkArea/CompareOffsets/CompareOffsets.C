@@ -31,7 +31,8 @@ int main()
     int intermediateEFieldN[3] = {6, 5, 4};
 
     SpaceCharge *myExperiment = new SpaceCharge("../../OutputFiles/SCEoffsets_ProtoDUNE_E500.root",
-						initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN, "ProtoDUNE");
+						initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN,
+						500.0, "ProtoDUNE");
 
     SpaceChargeProtoDUNE *oldExperiment = new SpaceChargeProtoDUNE("../../OldFiles/ProtoDUNE/Mike_SCEoffsets_ProtoDUNE_E500.root");
     TFile *fileInput = new TFile("../../InputFiles/dispOutput_protoDUNE_E500.root");
@@ -45,7 +46,8 @@ int main()
 
     /**
        SpaceCharge *myExperiment = new SpaceCharge("../../OutputFiles/SCEoffsets_MicroBooNE_E500.root",
-       initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN, "MicroBooNE");
+       initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN,
+       500.0, "MicroBooNE");
        SpaceChargeMicroBooNE *oldExperiment = new SpaceChargeMicroBooNE("../../OldFiles/MicroBooNE/Mike_SCEoffsets_MicroBooNE_E500.root");
        TFile *fileInput = new TFile("../../InputFiles/dispOutput_MicroBooNE_E500.root");
        TFile *histoFile = new TFile("../../OutputFiles/OffsetsComparision_MicroBooNE.root", "RECREATE");
@@ -61,15 +63,15 @@ int main()
     const double minD = -0.1;
     const double maxD = 0.1;
     const int eBins = 100;
-    const double minE = -7000;
-    const double maxE = 7000;
+    const double minE = -0.15;
+    const double maxE = 0.15;
 
     TH1D *iDx = new TH1D("iDx", "", dBins, minD, maxD);
     TH1D *iDy = new TH1D("iDy", "", dBins, minD, maxD);
     TH1D *iDz = new TH1D("iDz", "", dBins, minD, maxD);
-    TH1D *iEx = new TH1D("iEx", "", eBins, minE, maxE);
-    TH1D *iEy = new TH1D("iEy", "", eBins, minE, maxE);
-    TH1D *iEz = new TH1D("iEz", "", eBins, minE, maxE);
+    TH1D *iEx = new TH1D("iEx", "", eBins, -7000.0, 7000.0);
+    TH1D *iEy = new TH1D("iEy", "", eBins, -7000.0, 7000.0);
+    TH1D *iEz = new TH1D("iEz", "", eBins, -7000.0, 7000.0);
 
     TH1D *mDx = new TH1D("mDx", "", dBins, minD, maxD);
     TH1D *mDy = new TH1D("mDy", "", dBins, minD, maxD);

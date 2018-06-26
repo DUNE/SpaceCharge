@@ -16,8 +16,8 @@
 
 SpaceCharge::SpaceCharge(std::string filename,
                          const int initialSpatialPolN[3], const int intermediateSpatialPolN[3], const int initialEFieldPolN[3], const int intermediateEFieldPolN[3],
-                         const std::string eName)
-    : ExperimentName(eName)
+                         const double drift, const std::string eName)
+    : DriftField(drift), ExperimentName(eName)
 {
     for(int i = 0; i < 3; i++)
         {
@@ -256,9 +256,11 @@ std::vector<double> SpaceCharge::GetEfieldOffsets(double xVal, double yVal, doub
             theEfieldOffsets = GetEfieldOffsetsParametric(xVal, yVal, zVal);
         }
 
-    //theEfieldOffsets.at(0) = -1.0 * theEfieldOffsets.at(0);
-    //theEfieldOffsets.at(1) = -1.0 * theEfieldOffsets.at(1);
-    //theEfieldOffsets.at(2) = -1.0 * theEfieldOffsets.at(2);
+    // GetOneEfieldOffsetParametric returns V/m
+    // The E-field offsets are returned as -dEx/|E_nominal|, -dEy/|E_nominal|, and -dEz/|E_nominal| where |E_nominal| is DriftField
+    theEfieldOffsets.at(0) = -1.0 * theEfieldOffsets.at(0) / (100.0 * DriftField);
+    theEfieldOffsets.at(1) = -1.0 * theEfieldOffsets.at(1) / (100.0 * DriftField);
+    theEfieldOffsets.at(2) = -1.0 * theEfieldOffsets.at(2) / (100.0 * DriftField);
 
     return theEfieldOffsets;
 }

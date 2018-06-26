@@ -11,7 +11,7 @@ class SpaceCharge
 
     SpaceCharge(std::string filename,
                 const int initialSpatialPolN[3], const int intermediateSpatialPolN[3], const int initialEFieldPolN[3], const int intermediateEFieldPolN[3],
-                const std::string eName);
+                const double drift, const std::string eName);
     ~SpaceCharge();
 
     bool Configure(std::string filename);
@@ -21,6 +21,7 @@ class SpaceCharge
  protected:
     int initialSpatialFitPolN[3], intermediateSpatialFitPolN[3];
     int initialEFieldFitPolN[3], intermediateEFieldFitPolN[3];
+    double DriftField; // 500 V/cm, 273 V/cm
     std::string ExperimentName;//MicroBooNE, ProtoDUNE, SBND
 
     std::vector<double> GetPosOffsetsParametric(double xVal, double yVal, double zVal) const;

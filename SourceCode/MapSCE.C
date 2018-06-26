@@ -63,7 +63,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
     cout << "----------------------------------------------------------------------" << endl;
     cout << "Performing transformation" << endl << endl;
     cout << "Input file is: " << InputFile << endl;
-    cout << "Drift field is: " << DriftField << "V/m" << endl;
+    cout << "Drift field is: " << DriftField << "V/cm" << endl;
     cout << "Output file directory is: " << OutputDirectory << endl;
     cout << "Field to transform is: " << FieldToTransform << endl;
     cout << "Dimension to transform is: " << DimensionToTransform << endl;
