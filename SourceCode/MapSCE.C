@@ -137,6 +137,10 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
 
     double xLimit = xTrueMax / 2.0, yLimit = yTrueMax / 2.0, zLimit = zTrueMax / 2.0;
     cout << "xLimt = " << xLimit << ", yLimt = " << yLimit << ", zLimt = " << zLimit << endl;
+
+    double nLimit = 0.005*BinningFactor;
+    cout << "nLimt = " << nLimit <<endl;
+
     cout << endl << endl;
 
     int iBins = 0, jBins = 0;
@@ -157,17 +161,17 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
             if(FieldToTransform == "Spatial")
                 {
                     initialWhatToDraw =  Form("Dx:x_true-%f", xAxisInitialMax - 0.0001);
-                    initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
+                    initialConditionToDraw = "fabs(y_true-%f)<%f && fabs(z_true-%f)<%f";
                 }
             else
                 {
                     initialWhatToDraw =  Form("Ex:xpoint-%f", xAxisInitialMax);
-                    initialConditionToDraw = "fabs(ypoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
+                    initialConditionToDraw = "fabs(ypoint-%f)<%f && fabs(zpoint-%f)<%f";
                 }
         }
     else if(DimensionToTransform == "Y")
         {
-            iBins = xBins;
+            iBins = xBins - 1;
             jBins = zBins;
 
             xAxisInitialMin = -yLimit;
@@ -178,12 +182,12 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
             if(FieldToTransform == "Spatial")
                 {
                     initialWhatToDraw =  Form("Dy:y_true-%f", xAxisInitialMax);
-                    initialConditionToDraw = "fabs(x_true-%f)<0.025 && fabs(z_true-%f)<0.025";
+                    initialConditionToDraw = "fabs(x_true-%f)<%f && fabs(z_true-%f)<%f";
                 }
             else
                 {
                     initialWhatToDraw =  Form("Ey:ypoint-%f", xAxisInitialMax);
-                    initialConditionToDraw = "fabs(xpoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
+                    initialConditionToDraw = "fabs(xpoint-%f)<%f && fabs(zpoint-%f)<%f";
                 }
         }
     else if (DimensionToTransform == "Z")
@@ -199,12 +203,12 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
             if(FieldToTransform == "Spatial")
                 {
                     initialWhatToDraw =  Form("Dz:x_true-%f", xAxisInitialMax);
-                    initialConditionToDraw = "fabs(y_true-%f)<0.025 && fabs(z_true-%f)<0.025";
+                    initialConditionToDraw = "fabs(y_true-%f)<%f && fabs(z_true-%f)<%f";
                 }
             else
                 {
                     initialWhatToDraw =  Form("Ez:xpoint-%f", xAxisInitialMax);
-                    initialConditionToDraw = "fabs(ypoint-%f)<0.025 && fabs(zpoint-%f)<0.025";
+                    initialConditionToDraw = "fabs(ypoint-%f)<%f && fabs(zpoint-%f)<%f";
                 }
         }
     else
@@ -247,7 +251,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                     cInitialHistos->cd();
 
                     TF1 *initialFitFunction =  new TF1("initialFitFunction", Form("pol%i", initialFitPolN));
-                    TreeInput->Fit("initialFitFunction", initialWhatToDraw, Form(initialConditionToDraw, iPosition, jPosition), "Q");
+                    TreeInput->Fit("initialFitFunction", initialWhatToDraw, Form(initialConditionToDraw, iPosition, nLimit, jPosition, nLimit), "Q");
                     initialFitFunction->GetParameters(initialFitParameter);
                     initialFitFunction->SetLineWidth(1);
 
@@ -301,7 +305,7 @@ void MapSCE::PerformTransformation(string FieldToTransform, string DimensionToTr
                     cIntermediateHistos->cd();
 
                     TF1 *intermediateFitFunction =  new TF1("intermediateFitFunction", Form("pol%i", intermediateFitPolN));
-                    tIntermediateTree->Fit("intermediateFitFunction", Form("initialFitParameter_%i:iPosition-%f", r, xAxisIntermediateMax), Form("fabs(jPosition-%f)<0.025", kPosition), "Q");
+                    tIntermediateTree->Fit("intermediateFitFunction", Form("initialFitParameter_%i:iPosition-%f", r, xAxisIntermediateMax), Form("fabs(jPosition-%f)<%f", kPosition, nLimit), "Q");
                     intermediateFitFunction->GetParameters(intermediateFitParameter[r]);
                     intermediateFitFunction->SetLineWidth(1);
 

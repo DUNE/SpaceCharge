@@ -55,13 +55,13 @@ void PlotOffsetsComparision()
             TCanvas *cComparisionD = new TCanvas(Form("cComparisionD_%u", i), "", 1500, 1500);
             cComparisionD->Divide(3, 3);
             TH1D *iDx = (TH1D*)inputFile->Get("iDx");
-            setHisto(iDx, "Dx", "Count");
+            setHisto(iDx, "dDx (m)", "Count");
             iDx->SetTitle("Input");
             TH1D *mDx = (TH1D*)inputFile->Get("mDx");
-            setHisto(mDx, "Dx", "");
+            setHisto(mDx, "dDx (cm)", "");
             mDx->SetTitle("New");
             TH1D *oDx = (TH1D*)inputFile->Get("oDx");
-            setHisto(oDx, "Dx", "");
+            setHisto(oDx, "dDx (cm)", "");
             oDx->SetTitle("Mike's");
 
             cComparisionD->cd(1);
@@ -75,11 +75,11 @@ void PlotOffsetsComparision()
             oDx->Draw();
 
             TH1D *iDy = (TH1D*)inputFile->Get("iDy");
-            setHisto(iDy, "Dy", "Count");
+            setHisto(iDy, "dDy (m)", "Count");
             TH1D *mDy = (TH1D*)inputFile->Get("mDy");
-            setHisto(mDy, "Dy", "");
+            setHisto(mDy, "dDy (cm)", "");
             TH1D *oDy = (TH1D*)inputFile->Get("oDy");
-            setHisto(oDy, "Dy", "");
+            setHisto(oDy, "dDy (cm)", "");
 
             cComparisionD->cd(4);
             gPad->SetLogy();
@@ -92,11 +92,11 @@ void PlotOffsetsComparision()
             oDy->Draw();
 
             TH1D *iDz = (TH1D*)inputFile->Get("iDz");
-            setHisto(iDz, "Dz", "Count");
+            setHisto(iDz, "dDz (m)", "Count");
             TH1D *mDz = (TH1D*)inputFile->Get("mDz");
-            setHisto(mDz, "Dz", "");
+            setHisto(mDz, "dDz (cm)", "");
             TH1D *oDz = (TH1D*)inputFile->Get("oDz");
-            setHisto(oDz, "Dz", "");
+            setHisto(oDz, "dDz (cm)", "");
 
             cComparisionD->cd(7);
             gPad->SetLogy();
@@ -112,57 +112,57 @@ void PlotOffsetsComparision()
             TCanvas *cComparisionE = new TCanvas(Form("cComparisionE_%u", i), "", 1500, 1500);
             cComparisionE->Divide(3, 3);
             TH1D *iEx = (TH1D*)inputFile->Get("iEx");
-            setHisto(iEx, "Ex", "Count");
+            setHisto(iEx, "dEx (V/m)", "Count");
             iEx->SetTitle("Input");
             TH1D *mEx = (TH1D*)inputFile->Get("mEx");
-            setHisto(mEx, "Ex", "");
+            setHisto(mEx, "-dEx/E", "");
             mEx->SetTitle("New");
             TH1D *oEx = (TH1D*)inputFile->Get("oEx");
-            setHisto(oEx, "Ex", "");
+            setHisto(oEx, "-dEx/E", "");
             oEx->SetTitle("Mike's");
 
             cComparisionE->cd(1);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             iEx->Draw();
             cComparisionE->cd(2);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             mEx->Draw();
             cComparisionE->cd(3);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             oEx->Draw();
 
             TH1D *iEy = (TH1D*)inputFile->Get("iEy");
-            setHisto(iEy, "Ey", "Count");
+            setHisto(iEy, "dEy (V/m)", "Count");
             TH1D *mEy = (TH1D*)inputFile->Get("mEy");
-            setHisto(mEy, "Ey", "");
+            setHisto(mEy, "-dEy/E", "");
             TH1D *oEy = (TH1D*)inputFile->Get("oEy");
-            setHisto(oEy, "Ey", "");
+            setHisto(oEy, "-dEy/E", "");
 
             cComparisionE->cd(4);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             iEy->Draw();
             cComparisionE->cd(5);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             mEy->Draw();
             cComparisionE->cd(6);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             oEy->Draw();
 
             TH1D *iEz = (TH1D*)inputFile->Get("iEz");
-            setHisto(iEz, "Ez", "Count");
+            setHisto(iEz, "dEz (V/m)", "Count");
             TH1D *mEz = (TH1D*)inputFile->Get("mEz");
-            setHisto(mEz, "Ez", "");
+            setHisto(mEz, "-dEz/E", "");
             TH1D *oEz = (TH1D*)inputFile->Get("oEz");
-            setHisto(oEz, "Ez", "");
+            setHisto(oEz, "-dEz/E", "");
 
             cComparisionE->cd(7);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             iEz->Draw();
             cComparisionE->cd(8);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             mEz->Draw();
             cComparisionE->cd(9);
-	    gPad->SetLogy();
+            gPad->SetLogy();
             oEz->Draw();
             cComparisionE->Update();
 

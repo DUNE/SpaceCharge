@@ -128,6 +128,12 @@ std::vector<double> SpaceCharge::GetPosOffsets(double xVal, double yVal, double 
             thePosOffsets = GetPosOffsetsParametric(xVal, yVal, zVal);
         }
 
+    // GetPosOffsetsParametric returns m
+    // The PosOffsets are returned as cm
+    thePosOffsets.at(0) = 100.0 * thePosOffsets.at(0);
+    thePosOffsets.at(1) = 100.0 * thePosOffsets.at(1);
+    thePosOffsets.at(2) = 100.0 * thePosOffsets.at(2);
+
     return thePosOffsets;
 }
 
@@ -217,7 +223,7 @@ double SpaceCharge::GetOnePosOffsetParametric(double xValNew, double yValNew, do
                     parB[i] = intermediateSpatialFitFunctionX[i]->Eval(aValNew);
                 }
             initialSpatialFitFunctionX->SetParameters(parB);
-            offsetValNew = 100.0 * initialSpatialFitFunctionX->Eval(bValNew);
+            offsetValNew = initialSpatialFitFunctionX->Eval(bValNew);
         }
     else if(axis == "Y")
         {
@@ -226,7 +232,7 @@ double SpaceCharge::GetOnePosOffsetParametric(double xValNew, double yValNew, do
                     parB[i] = intermediateSpatialFitFunctionY[i]->Eval(aValNew);
                 }
             initialSpatialFitFunctionY->SetParameters(parB);
-            offsetValNew = 100.0 * initialSpatialFitFunctionY->Eval(bValNew);
+            offsetValNew = initialSpatialFitFunctionY->Eval(bValNew);
         }
     else if(axis == "Z")
         {
@@ -235,7 +241,7 @@ double SpaceCharge::GetOnePosOffsetParametric(double xValNew, double yValNew, do
                     parB[i] = intermediateSpatialFitFunctionZ[i]->Eval(aValNew);
                 }
             initialSpatialFitFunctionZ->SetParameters(parB);
-            offsetValNew = 100.0 * initialSpatialFitFunctionZ->Eval(bValNew);
+            offsetValNew = initialSpatialFitFunctionZ->Eval(bValNew);
         }
 
     return offsetValNew;

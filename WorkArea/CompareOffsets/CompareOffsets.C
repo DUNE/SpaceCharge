@@ -30,6 +30,7 @@ int main()
     int initialEFieldN[3] = {4, 5, 3};
     int intermediateEFieldN[3] = {6, 5, 4};
 
+
     SpaceCharge *myExperiment = new SpaceCharge("../../OutputFiles/SCEoffsets_ProtoDUNE_E500.root",
 						initialSpatialN, intermediateSpatialN, initialEFieldN, intermediateEFieldN,
 						500.0, "ProtoDUNE");
@@ -43,6 +44,7 @@ int main()
     int yMax = 615;
     int zMin = -5;
     int zMax = 705;
+    int sFactor = 1;
 
     /**
        SpaceCharge *myExperiment = new SpaceCharge("../../OutputFiles/SCEoffsets_MicroBooNE_E500.root",
@@ -57,30 +59,30 @@ int main()
        int yMax = 120;
        int zMin = 0;
        int zMax = 1050;
+       int sFactor = 2;
     **/
+    const int dBins = 264 / sFactor;
+    const double minD = -22.0 / sFactor;
+    const double maxD = 22.0 / sFactor;
+    const int eBins = 180 / sFactor;
+    const double minE = -0.15 / sFactor;
+    const double maxE = 0.15 / sFactor;
 
-    const int dBins = 100;
-    const double minD = -0.1;
-    const double maxD = 0.1;
-    const int eBins = 100;
-    const double minE = -0.15;
-    const double maxE = 0.15;
-
-    TH1D *iDx = new TH1D("iDx", "", dBins, minD, maxD);
-    TH1D *iDy = new TH1D("iDy", "", dBins, minD, maxD);
-    TH1D *iDz = new TH1D("iDz", "", dBins, minD, maxD);
+    TH1D *iDx = new TH1D("iDx", "", dBins / 2, -0.22 / 2.0, 0.22 / 2.0);
+    TH1D *iDy = new TH1D("iDy", "", dBins, -0.22, 0.22);
+    TH1D *iDz = new TH1D("iDz", "", dBins, -0.22, 0.22);
     TH1D *iEx = new TH1D("iEx", "", eBins, -7000.0, 7000.0);
     TH1D *iEy = new TH1D("iEy", "", eBins, -7000.0, 7000.0);
     TH1D *iEz = new TH1D("iEz", "", eBins, -7000.0, 7000.0);
 
-    TH1D *mDx = new TH1D("mDx", "", dBins, minD, maxD);
+    TH1D *mDx = new TH1D("mDx", "", dBins / 2, minD / 2.0, maxD / 2.0);
     TH1D *mDy = new TH1D("mDy", "", dBins, minD, maxD);
     TH1D *mDz = new TH1D("mDz", "", dBins, minD, maxD);
     TH1D *mEx = new TH1D("mEx", "", eBins, minE, maxE);
     TH1D *mEy = new TH1D("mEy", "", eBins, minE, maxE);
     TH1D *mEz = new TH1D("mEz", "", eBins, minE, maxE);
 
-    TH1D *oDx = new TH1D("oDx", "", dBins, minD, maxD);
+    TH1D *oDx = new TH1D("oDx", "", dBins / 2, minD / 2.0, maxD / 2.0);
     TH1D *oDy = new TH1D("oDy", "", dBins, minD, maxD);
     TH1D *oDz = new TH1D("oDz", "", dBins, minD, maxD);
     TH1D *oEx = new TH1D("oEx", "", eBins, minE, maxE);
@@ -96,34 +98,57 @@ int main()
     TreeE->Draw("Ey>>iEy");
     TreeE->Draw("Ez>>iEz");
 
+    int nSkip = 10;
     for(int iX = xMin; iX <= xMax; iX++)
         {
-            iX = iX + 10;
+            iX = iX + nSkip;
             for(int iY = yMin; iY <= yMax; iY++)
                 {
-                    iY = iY + 10;
+                    iY = iY + nSkip;
                     for(int iZ = zMin; iZ <= zMax; iZ++)
                         {
-                            iZ = iZ + 10;
+                            iZ = iZ + nSkip;
                             cout << iX << ", " << iY << ", " << iZ << endl;
 
                             vector<double> mySpatialOffsets = myExperiment->GetPosOffsets(iX, iY, iZ);
+                            if(!((mySpatialOffsets.at(0) == mySpatialOffsets.at(1)) &&
+				 (mySpatialOffsets.at(1) == mySpatialOffsets.at(2)) &&
+				 (mySpatialOffsets.at(2) == 0.0)))
+                                {
+                                    mDx->Fill(mySpatialOffsets.at(0));
+                                    mDy->Fill(mySpatialOffsets.at(1));
+                                    mDz->Fill(mySpatialOffsets.at(2));
+                                }
+
                             vector<double> myEfieldOffsets = myExperiment->GetEfieldOffsets(iX, iY, iZ);
-                            mDx->Fill(mySpatialOffsets.at(0));
-                            mDy->Fill(mySpatialOffsets.at(1));
-                            mDz->Fill(mySpatialOffsets.at(2));
-                            mEx->Fill(myEfieldOffsets.at(0));
-                            mEy->Fill(myEfieldOffsets.at(1));
-                            mEz->Fill(myEfieldOffsets.at(2));
+                            if(!((myEfieldOffsets.at(0) == myEfieldOffsets.at(1)) &&
+				 (myEfieldOffsets.at(1) == myEfieldOffsets.at(2)) &&
+				 (myEfieldOffsets.at(2) == 0.0)))
+                                {
+                                    mEx->Fill(myEfieldOffsets.at(0));
+                                    mEy->Fill(myEfieldOffsets.at(1));
+                                    mEz->Fill(myEfieldOffsets.at(2));
+                                }
 
                             vector<double> oldSpatialOffsets = oldExperiment->GetPosOffsets(iX, iY, iZ);
+                            if(!((oldSpatialOffsets.at(0) == oldSpatialOffsets.at(1)) &&
+				 (oldSpatialOffsets.at(1) == oldSpatialOffsets.at(2)) &&
+				 (oldSpatialOffsets.at(2) == 0.0)))
+                                {
+                                    oDx->Fill(oldSpatialOffsets.at(0));
+                                    oDy->Fill(oldSpatialOffsets.at(1));
+                                    oDz->Fill(oldSpatialOffsets.at(2));
+                                }
+
                             vector<double> oldEfieldOffsets = oldExperiment->GetEfieldOffsets(iX, iY, iZ);
-                            oDx->Fill(oldSpatialOffsets.at(0));
-                            oDy->Fill(oldSpatialOffsets.at(1));
-                            oDz->Fill(oldSpatialOffsets.at(2));
-                            oEx->Fill(oldEfieldOffsets.at(0));
-                            oEy->Fill(oldEfieldOffsets.at(1));
-                            oEz->Fill(oldEfieldOffsets.at(2));
+                            if(!((oldEfieldOffsets.at(0) == oldEfieldOffsets.at(1)) &&
+				 (oldEfieldOffsets.at(1) == oldEfieldOffsets.at(2)) &&
+				 (oldEfieldOffsets.at(2) == 0.0)))
+                                {
+                                    oEx->Fill(oldEfieldOffsets.at(0));
+                                    oEy->Fill(oldEfieldOffsets.at(1));
+                                    oEz->Fill(oldEfieldOffsets.at(2));
+                                }
                         }
                 }
         }
